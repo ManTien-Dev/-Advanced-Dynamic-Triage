@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Dynamic Triage - Hệ Thống Điều Phối Lũy Tiến</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="presentation" id="presentation">
+    
+    <!-- SLIDE 1: TITLE SLIDE -->
+    <div class="slide active slide-title-page" id="slide-1">
+      <div class="slide-tag animate-1">Thuyết Trình Assignment</div>
+      <h1 class="animate-2">Hệ Thống Phân Loại Bệnh Nhân<br>Cấp Cứu Lũy Tiến</h1>
+      <h2 class="animate-3">Advanced Dynamic Triage System</h2>
+      
+      <div class="author-info animate-4">
+        <div class="author-badge">
+          <span class="label">Môn Học</span>
+          <span class="value">CSE 201</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: THE TRAGIC REALITY (MỚI) -->
+    <div class="slide" id="slide-2">
+      <div class="slide-header">
+        <span class="slide-tag">Thực Trạng Đáng Báo Động</span>
+        <h1 class="slide-title">Hậu Quả Thương Tâm Từ Việc Chờ Đợi Lâu</h1>
+      </div>
+      <div class="slide-content">
+        <div class="news-grid">
+          
+          <!-- Báo 1: PLO -->
+          <a href="https://plo.vn/bv-cho-ray-xin-loi-gia-dinh-benh-nhan-chet-sau-4-gio-nhap-vien-post532930.html" target="_blank" class="news-card animate-1">
+            <div class="news-source">PLO.VN</div>
+            <div class="news-headline">BV Chợ Rẫy xin lỗi gia đình bệnh nhân chết sau 4 giờ nhập viện</div>
+            <div class="news-quote">"Bệnh viện Chợ Rẫy thừa nhận có sai sót trong quá trình tiếp nhận, phân loại và theo dõi điều trị, để bệnh nhân nằm chờ quá lâu mà không được xử lý cấp cứu kịp thời dẫn đến tử vong..."</div>
+            <div class="news-meta">
+              <span>Thời sự & Pháp luật</span>
+              <span>10/07/2019</span>
+            </div>
+          </a>
+
+          <!-- Báo 2: ITV News -->
+          <a href="https://www.itv.com/news/2023-02-28/a-and-e-wait-times-linked-to-23000-excess-deaths-college-claims" target="_blank" class="news-card animate-2">
+            <div class="news-source">ITV News</div>
+            <div class="news-headline">A&E wait times linked to 23,000 excess deaths, college claims</div>
+            <div class="news-quote">"The Royal College of Emergency Medicine calculated that long waiting times in emergency departments contributed directly to thousands of preventable patient deaths..."</div>
+            <div class="news-meta">
+              <span>NHS Crisis</span>
+              <span>28/02/2023</span>
+            </div>
+          </a>
+
+          <!-- Báo 3: CityNews Montreal -->
+          <a href="https://montreal.citynews.ca/2023/12/05/investigations-deaths-emergency-room-anna-laberge" target="_blank" class="news-card animate-3">
+            <div class="news-source">CityNews Montreal</div>
+            <div class="news-headline">Investigations launched into deaths in ER at Anna-Laberge</div>
+            <div class="news-quote">"Two patients died in the emergency room waiting area within 24 hours. The hospital was severely overcrowded, forcing patients with moderate priority to wait for hours without monitoring..."</div>
+            <div class="news-meta">
+              <span>Canada ER Crisis</span>
+              <span>05/12/2023</span>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: THE PROBLEM -->
+    <div class="slide" id="slide-3">
+      <div class="slide-header">
+        <span class="slide-tag">Thực Trạng Lâm Sàng</span>
+        <h1 class="slide-title">Hàng Đợi Tĩnh & "Điểm Mù Phòng Chờ"</h1>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="animate-1">
+            <h3 style="color:#ef4444; margin-bottom:1rem; font-size:1.4rem;">Vấn nạn tại phòng cấp cứu (ED):</h3>
+            <ul class="bullets">
+              <li>Y bác sĩ dồn toàn lực cấp cứu các ca nguy kịch (<span class="highlight-text">Mức 1 & 2</span>).</li>
+              <li>Các ca nhẹ hơn (<span class="highlight-text">Mức 3 & 4</span>) bị giữ lại ở phòng chờ để đợi khám hoặc đợi kết quả xét nghiệm.</li>
+              <li>Khi bệnh nhân Mức 3 liên tục vào viện, họ có quyền chen ngang và liên tục đẩy bệnh nhân Mức 4 xuống đáy.</li>
+            </ul>
+          </div>
+          <div class="card animate-2">
+            <h3 style="color:#f97316;">Hiện tượng Starvation (Đóng băng)</h3>
+            <p style="margin-bottom: 1rem;">Bệnh nhân mức ưu tiên thấp bị bỏ rơi ở đáy hàng đợi vô thời hạn. Trong y khoa, thể trạng suy giảm là một tiến trình liên tục (Patient Deterioration).</p>
+            <p><strong>Hệ quả:</strong> Lỗi thiết kế của Hàng đợi tĩnh biến phòng chờ thành "điểm mù" nguy hiểm, nơi thể trạng bệnh nhân suy giảm âm thầm mà không có thiết bị giám sát liên tục.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: SOLUTION MODEL -->
+    <div class="slide" id="slide-4">
+      <div class="slide-header">
+        <span class="slide-tag">Giải Pháp Kỹ Thuật</span>
+        <h1 class="slide-title">Mô Hình Điểm Ưu Tiên Động (Dynamic Triage)</h1>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="animate-1">
+            <p style="font-size: 1.15rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6;">
+              Hệ thống coi <span class="highlight-text">thời gian chờ (T<sub>wait</sub>)</span> là một hệ số rủi ro sinh học. Điểm ưu tiên của bệnh nhân sẽ tự động tăng dần theo thời gian họ phải ngồi chờ theo 3 giai đoạn tích lũy:
+            </p>
+            <div class="card animate-2" style="padding: 1.1rem; border-left: 4px solid var(--q1-color);">
+              <h3 style="font-size: 1.1rem; margin-bottom: 0.3rem; color: var(--q1-color);">Giai đoạn 1 (0 đến 60 phút)</h3>
+              <p style="font-size: 0.95rem; color: var(--text-secondary);">P<sub>current</sub> = P<sub>base</sub> + T<sub>wait</sub> × R1</p>
+            </div>
+            <div class="card animate-3" style="padding: 1.1rem; margin-top: 0.75rem; border-left: 4px solid var(--q2-color);">
+              <h3 style="font-size: 1.1rem; margin-bottom: 0.3rem; color: var(--q2-color);">Giai đoạn 2 (61 đến 120 phút)</h3>
+              <p style="font-size: 0.95rem; color: var(--text-secondary);">P<sub>current</sub> = P<sub>base</sub> + 60 × R1 + (T<sub>wait</sub> - 60) × R2</p>
+            </div>
+            <div class="card animate-4" style="padding: 1.1rem; margin-top: 0.75rem; border-left: 4px solid var(--q3-color);">
+              <h3 style="font-size: 1.1rem; margin-bottom: 0.3rem; color: var(--q3-color);">Giai đoạn 3 (Trên 120 phút)</h3>
+              <p style="font-size: 0.95rem; color: var(--text-secondary);">P<sub>current</sub> = P<sub>base</sub> + 60 × R1 + 60 × R2 + (T<sub>wait</sub> - 120) × R3</p>
+            </div>
+          </div>
+          <div class="card animate-3" style="background: rgba(16, 185, 129, 0.03); border-color: rgba(16, 185, 129, 0.15);">
+            <h3 style="color:#10b981;">Điểm ưu tiên ban đầu (P<sub>base</sub>)</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 1rem; color: var(--text-secondary);">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); text-align: left;">
+                  <th style="padding: 0.5rem 0;">Level Lâm Sàng</th>
+                  <th style="padding: 0.5rem 0;">Điểm Cơ Bản P<sub>base</sub></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style="padding: 0.5rem 0; color: var(--lvl-1); font-weight: bold;">Level 1</td><td style="padding: 0.5rem 0; font-family: var(--font-mono);">1000</td></tr>
+                <tr><td style="padding: 0.5rem 0; color: var(--lvl-2); font-weight: bold;">Level 2</td><td style="padding: 0.5rem 0; font-family: var(--font-mono);">500</td></tr>
+                <tr><td style="padding: 0.5rem 0; color: var(--lvl-3); font-weight: bold;">Level 3</td><td style="padding: 0.5rem 0; font-family: var(--font-mono);">250</td></tr>
+                <tr><td style="padding: 0.5rem 0; color: var(--lvl-4); font-weight: bold;">Level 4</td><td style="padding: 0.5rem 0; font-family: var(--font-mono);">100</td></tr>
+                <tr><td style="padding: 0.5rem 0; color: var(--lvl-5); font-weight: bold;">Level 5</td><td style="padding: 0.5rem 0; font-family: var(--font-mono);">0</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: MATHEMATICAL MODELING -->
+    <div class="slide" id="slide-5">
+      <div class="slide-header">
+        <span class="slide-tag">Thách Thức Thuật Toán</span>
+        <h1 class="slide-title">Mô Hình Hóa Toán Học & Tối Ưu Hóa O(N log N)</h1>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="animate-1">
+            <h3 style="color:#ef4444; margin-bottom: 0.5rem;">Giới hạn N = 200,000 sự kiện</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.5;">
+              Nếu mỗi lệnh <code>CALL</code> ta lặp qua toàn bộ bệnh nhân ở phòng chờ để tính lại điểm, độ phức tạp sẽ là <code>O(N²)</code>, gây lỗi <strong>Time Limit Exceeded (TLE)</strong> trong 1 giây.
+            </p>
+            <div class="card">
+              <h3 style="color:#10b981; font-size:1.2rem;">Phân tích biểu thức của Giai đoạn 1:</h3>
+              <div class="math-block">
+                <div class="math-formula">P<sub>current</sub> = (P<sub>base</sub> - T<sub>arrive</sub> * R1) + T * R1</div>
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-muted);">
+                Tại một thời điểm gọi khám <code>T</code>, giá trị <code>T * R1</code> là giống nhau cho mọi bệnh nhân ở G1. Do đó, người nào có cụm hằng số tĩnh <code>c1 = P<sub>base</sub> - T<sub>arrive</sub> * R1</code> lớn nhất sẽ luôn là người có điểm thực tế cao nhất ở G1.
+              </p>
+            </div>
+          </div>
+          <div class="card animate-2" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+            <h3 style="color:#3b82f6; margin-bottom: 1rem;">Tính chất then chốt:</h3>
+            <ul class="bullets" style="font-size: 1rem;">
+              <li style="margin-bottom: 1rem;">Bằng cách tách công thức thành một <strong>cụm hằng số tĩnh</strong> (tính ngay khi vào viện) và một phần động phụ thuộc vào <code>T</code>, ta không cần cập nhật điểm liên tục!</li>
+              <li style="margin-bottom: 1rem;">Thứ tự ưu tiên tương đối của các bệnh nhân trong cùng một giai đoạn là <strong>không bao giờ thay đổi</strong>.</li>
+              <li>Chúng ta chỉ cần đẩy bệnh nhân vào các hàng đợi ưu tiên có khóa là các hằng số tĩnh <code>c1, c2, c3</code> này.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: ARCHITECTURE & LAZY MIGRATION -->
+    <div class="slide" id="slide-6">
+      <div class="slide-header">
+        <span class="slide-tag">Thiết Kế Cấu Trúc Dữ Liệu</span>
+        <h1 class="slide-title">3 Priority Queues & Cơ Chế Lazy Migration</h1>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="animate-1">
+            <ul class="bullets">
+              <li>Sử dụng <span class="highlight-text">3 Priority Queues (Q1, Q2, Q3)</span> lưu trữ bệnh nhân theo 3 giai đoạn chờ.</li>
+              <li>Mỗi Queue được sắp xếp giảm dần theo cụm hằng số tĩnh của giai đoạn đó:
+                <ul>
+                  <li><strong>Q1</strong>: Sắp xếp theo <code>c1 = P<sub>base</sub> - T<sub>arrive</sub> * R1</code></li>
+                  <li><strong>Q2</strong>: Sắp xếp theo <code>c2 = P<sub>base</sub> + 60*R1 - 60*R2 - T<sub>arrive</sub> * R2</code></li>
+                  <li><strong>Q3</strong>: Sắp xếp theo <code>c3 = P<sub>base</sub> + 60*R1 + 60*R2 - 120*R3 - T<sub>arrive</sub> * R3</code></li>
+                </ul>
+              </li>
+              <li><span class="highlight-text">Lazy Migration (Dịch chuyển lười)</span>: Khi có lệnh <code>CALL T</code>, ta kiểm tra đỉnh của các Queue. Nếu bệnh nhân đã quá thời hạn của Queue hiện tại (ví dụ: đã chờ quá 60 phút ở Q1), ta rút họ ra khỏi Q1 và đẩy sang Q2.</li>
+            </ul>
+          </div>
+          <div class="card animate-2" style="background: rgba(139, 92, 246, 0.03); border-color: rgba(139, 92, 246, 0.15);">
+            <h3 style="color:#8b5cf6;">Độ Phức Tạp Thuật Toán</h3>
+            <p style="margin-bottom: 0.75rem;"><strong>Thời gian (Time Complexity):</strong></p>
+            <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.5;">
+              Mỗi bệnh nhân chỉ đi qua tối đa 3 Queue (Q1 -> Q2 -> Q3) và chỉ bị Push/Pop một số lần hằng số. Vậy tổng chi phí cho N sự kiện là <code class="highlight-text">O(N log N)</code>, đáp ứng thoải mái giới hạn 1.0 giây của bài toán.
+            </p>
+            <p style="margin-bottom: 0.75rem;"><strong>Không gian (Space Complexity):</strong></p>
+            <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5;">
+              Các Queue lưu trữ trực tiếp thông tin bệnh nhân hiện tại trong hệ thống. Bộ nhớ tối đa là <code class="highlight-text">O(N)</code>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: JAVA IMPLEMENTATION -->
+    <div class="slide" id="slide-7">
+      <div class="slide-header">
+        <span class="slide-tag">Mã Nguồn Chương Trình</span>
+        <h1 class="slide-title">Chi Tiết Cài Đặt Java</h1>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="animate-1">
+            <h3 style="color:#3b82f6; margin-bottom:0.5rem; font-size:1.15rem;">Cấu trúc lưu trữ bệnh nhân:</h3>
+            <pre style="height: 42vh; margin-bottom: 1rem;"><code class="language-java">static class Patient {
+    long tArrive;
+    String name;
+    long c1, c2, c3;
+    boolean removed;
+    int currentPhase;
+
+    Patient(long tArrive, String name, int level) {
+        this.tArrive = tArrive;
+        this.name = name;
+        long pBase = BASE[level - 1];
+        this.currentPhase = 1;
+        c1 = pBase - tArrive * R1;
+        c2 = pBase + 60 * R1 - 60 * R2 - tArrive * R2;
+        c3 = pBase + 60 * R1 + 60 * R2 - 120 * R3 - tArrive * R3;
+    }
+}</code></pre>
+          </div>
+          <div class="animate-2">
+            <h3 style="color:#10b981; margin-bottom:0.5rem; font-size:1.15rem;">Cơ chế Lazy Migration trong Hàm Main:</h3>
+            <pre style="height: 42vh; margin-bottom: 1rem;"><code class="language-java">// Di chuyển bệnh nhân từ Q1 sang Q2 khi quá 60 phút
+while (!tq1.isEmpty() && (T - tq1.peek().tArrive) >= 61) {
+    Patient p = tq1.poll();
+    if (!p.removed) {
+        p.currentPhase = 2;
+        q2.add(p);
+        tq2.add(p);
+    }
+}
+// Di chuyển từ Q2 sang Q3 khi quá 120 phút
+while (!tq2.isEmpty() && (T - tq2.peek().tArrive) >= 121) {
+    Patient p = tq2.poll();
+    if (!p.removed) {
+        p.currentPhase = 3;
+        q3.add(p);
+    }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: TESTING STRATEGY -->
+    <div class="slide" id="slide-8">
+      <div class="slide-header">
+        <span class="slide-tag">Đảm Bảo Chất Lượng</span>
+        <h1 class="slide-title">Kế Hoạch Kiểm Thử & Trường Hợp Biên</h1>
+      </div>
+      <div class="slide-content">
+        <div class="grid-3">
+          <div class="card animate-1">
+            <h3 style="color:#f97316; font-size: 1.2rem;">Tràn Số Nguyên (Integer Overflow)</h3>
+            <p style="font-size: 0.95rem; line-height: 1.55; color: var(--text-secondary);">
+              Thời gian <code>T</code> đạt tới <code>10⁹</code>, hệ số <code>R</code> tối đa <code>10</code>. Biểu thức <code>T * R</code> có thể lên tới <code>10¹⁰</code>, vượt quá giới hạn 32-bit của <code>int</code>.
+            </p>
+            <p style="font-size: 0.95rem; font-weight: bold; margin-top: 0.75rem; color:#ef4444;">
+              ➔ Giải pháp: Sử dụng kiểu <code>long</code> cho tất cả các điểm số và biến thời gian trong Java.
+            </p>
+          </div>
+          <div class="card animate-2">
+            <h3 style="color:#06b6d4; font-size: 1.2rem;">Thi Đấu Đồng Điểm (Tie-Breaker)</h3>
+            <p style="font-size: 0.95rem; line-height: 1.55; color: var(--text-secondary);">
+              Khi hai bệnh nhân có cùng điểm số <code>P<sub>current</sub></code> tại thời điểm <code>T</code>:
+            </p>
+            <ul style="list-style: none; font-size: 0.9rem; margin-top: 0.75rem; color: var(--text-secondary);">
+              <li style="margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color:#06b6d4; font-weight:bold;">1.</span> Ưu tiên <code>T<sub>arrive</sub></code> nhỏ hơn (đến trước).
+              </li>
+              <li style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color:#06b6d4; font-weight:bold;">2.</span> Ưu tiên tên bệnh nhân sắp xếp theo thứ tự từ điển (lexicographical).
+              </li>
+            </ul>
+          </div>
+          <div class="card animate-3">
+            <h3 style="color:#10b981; font-size: 1.2rem;">Stress Test (N=200,000)</h3>
+            <p style="font-size: 0.95rem; line-height: 1.55; color: var(--text-secondary);">
+              Hàng ngàn bệnh nhân dồn vào hệ thống tại <code>T=0</code> và gọi khám tại thời điểm rất xa trong tương lai. Lazy migration phải dịch chuyển hàng chục ngàn người cùng lúc mà không làm sập thời gian thực thi của hệ thống.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: INTERACTIVE SIMULATOR -->
+    <div class="slide" id="slide-9">
+      <div class="slide-header" style="margin-bottom: 1rem;">
+        <span class="slide-tag">Trực Quan Hóa Thuật Toán</span>
+        <h1 class="slide-title" style="font-size: 2.2rem;">Trình Mô Phỏng Hàng Đợi Tương Tác</h1>
+      </div>
+      <div class="slide-content">
+        <div class="simulator-layout animate-1">
+          
+          <!-- Control Panel -->
+          <div class="sim-controls">
+            
+            <div class="sim-section">
+              <div class="sim-section-title">Hệ số rủi ro hệ thống</div>
+              <div class="input-row">
+                <div class="form-group">
+                  <label for="r1-val">R1 (G1)</label>
+                  <input type="number" id="r1-val" class="sim-input" value="1" min="1" max="10">
+                </div>
+                <div class="form-group">
+                  <label for="r2-val">R2 (G2)</label>
+                  <input type="number" id="r2-val" class="sim-input" value="2" min="1" max="10">
+                </div>
+                <div class="form-group">
+                  <label for="r3-val">R3 (G3)</label>
+                  <input type="number" id="r3-val" class="sim-input" value="5" min="1" max="10">
+                </div>
+              </div>
+            </div>
+
+            <div class="sim-section" style="margin-top:0.3rem;">
+              <div class="sim-section-title">Thêm bệnh nhân mới</div>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem; margin-bottom:0.5rem;">
+                <div class="form-group">
+                  <label for="p-name">Tên</label>
+                  <input type="text" id="p-name" class="sim-input" value="An" placeholder="Tên bệnh nhân">
+                </div>
+                <div class="form-group">
+                  <label for="p-level">Cấp cứu (Level)</label>
+                  <select id="p-level" class="sim-input" style="height: 35px;">
+                    <option value="1">Level 1 (Đỏ - 1000đ)</option>
+                    <option value="2">Level 2 (Cam - 500đ)</option>
+                    <option value="3">Level 3 (Vàng - 250đ)</option>
+                    <option value="4" selected>Level 4 (Lam - 100đ)</option>
+                    <option value="5">Level 5 (Lục - 0đ)</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn btn-sm btn-primary-glow" id="btn-add-patient" style="width:100%;">Thêm Bệnh Nhân (IN)</button>
+            </div>
+
+            <div class="sim-section" style="margin-top:0.3rem;">
+              <div class="sim-section-title">Hành Động</div>
+              <div class="btn-group" style="margin-bottom:0.5rem;">
+                <button class="btn btn-sm" id="btn-step-time" style="background:#1e293b; border-color:#334155;">+5 Phút (Thời Gian)</button>
+                <button class="btn btn-sm" id="btn-call-patient" style="background:var(--primary); border-color:var(--primary); font-weight:700;">GỌI KHÁM (CALL)</button>
+              </div>
+              <div class="btn-group">
+                <button class="btn btn-sm" id="btn-load-sample" style="background:rgba(16,185,129,0.15); border-color:rgba(16,185,129,0.3); color:#34d399;">Nạp Kịch Bản Mẫu 1</button>
+                <button class="btn btn-sm" id="btn-reset-sim" style="background:rgba(239,68,68,0.15); border-color:rgba(239,68,68,0.3); color:#f87171;">Đặt Lại (Reset)</button>
+              </div>
+            </div>
+
+            <div class="sim-section" style="flex:1; display:flex; flex-direction:column; min-height:85px;">
+              <div class="sim-section-title">Nhật ký hệ thống (Console)</div>
+              <div class="console-log" id="sim-console">
+                <div class="console-line empty">Chưa có hành động nào được thực hiện. Bấm 'Nạp Kịch Bản Mẫu 1' để chạy thử!</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Board Visualizer -->
+          <div class="sim-board">
+            
+            <div class="board-header">
+              <div style="font-size: 1.1rem; font-weight:700; color: #fff; display:flex; align-items:center; gap:0.5rem;">
+                <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>
+                Hàng Đợi Phòng Chờ
+              </div>
+              <div class="time-badge" id="sim-time-badge">
+                <span>⏱</span> Thời gian hiện tại: <strong id="sim-time-val">0</strong> phút
+              </div>
+            </div>
+
+            <div class="queues-grid">
+              
+              <!-- QUEUE 1 -->
+              <div class="queue-row" id="q1-row">
+                <div class="queue-label">
+                  <span class="q-badge q1-badge">Queue 1 (G1)</span>
+                  <span class="queue-desc">Thời gian chờ &le; 60p<br>Sắp xếp theo cụm c1</span>
+                </div>
+                <div class="queue-cards" id="q1-cards">
+                  <div class="empty-queue-msg">Trống</div>
+                </div>
+              </div>
+
+              <!-- QUEUE 2 -->
+              <div class="queue-row" id="q2-row">
+                <div class="queue-label">
+                  <span class="q-badge q2-badge">Queue 2 (G2)</span>
+                  <span class="queue-desc">Chờ từ 61p &rarr; 120p<br>Sắp xếp theo cụm c2</span>
+                </div>
+                <div class="queue-cards" id="q2-cards">
+                  <div class="empty-queue-msg">Trống</div>
+                </div>
+              </div>
+
+              <!-- QUEUE 3 -->
+              <div class="queue-row" id="q3-row">
+                <div class="queue-label">
+                  <span class="q-badge q3-badge">Queue 3 (G3)</span>
+                  <span class="queue-desc">Chờ trên 120p<br>Sắp xếp theo cụm c3</span>
+                </div>
+                <div class="queue-cards" id="q3-cards">
+                  <div class="empty-queue-msg">Trống</div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CALL OVERLAY POPUP -->
+      <div class="call-announce-overlay" id="call-overlay">
+        <div class="call-announce-card">
+          <div class="call-announce-title">🔊 Loa thông báo</div>
+          <div style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Mời bệnh nhân vào phòng khám:</div>
+          <div class="call-announce-name" id="call-overlay-name">Nguyen Van A</div>
+          <div class="call-announce-stats">
+            <div class="call-announce-stat-box">
+              <span class="call-announce-stat-label">Thời điểm vào</span>
+              <span class="call-announce-stat-val" id="call-overlay-arrive">0p</span>
+            </div>
+            <div class="call-announce-stat-box">
+              <span class="call-announce-stat-label">Tổng thời gian chờ</span>
+              <span class="call-announce-stat-val" id="call-overlay-wait">120p</span>
+            </div>
+            <div class="call-announce-stat-box">
+              <span class="call-announce-stat-label">Điểm Triage đạt</span>
+              <span class="call-announce-stat-val" id="call-overlay-score" style="color:#60a5fa;">280</span>
+            </div>
+          </div>
+          <button class="btn" id="btn-close-overlay" style="margin: 0 auto; background: var(--primary); border-color: var(--primary);">Xác nhận & Tiếp tục</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAVIGATION BAR -->
+  <div class="nav-bar">
+    <button class="btn" id="btn-prev" disabled>&larr; Slide Trước</button>
+    
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    
+    <span class="slide-number" id="slide-num">Slide 1 / 9</span>
+    
+    <button class="btn" id="btn-next">Slide Tiếp Theo &rarr;</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
